@@ -38,6 +38,9 @@ type CacheConfig struct {
 
 	// DebugLogger
 	DebugLogger util.LoggerInterface
+
+	// Basic if true, then the cache path will be in the basic mode gorm-cache:<table>:<key>
+	Basic bool
 }
 
 type CacheLevel int

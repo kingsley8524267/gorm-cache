@@ -19,15 +19,19 @@ func GenInstanceId() string {
 	return string(str)
 }
 
-func GenPrimaryCacheKey(instanceId string, tableName string, primaryKey string) string {
-	return fmt.Sprintf("%s:%s:p:%s:%s", GormCachePrefix, instanceId, tableName, primaryKey)
+func GenBasicCachePrefix(_ string, tableName string) string {
+	return GormCachePrefix + ":" + tableName
+}
+
+func GenPrimaryCacheKey(prefix string, primaryKey string) string {
+	return fmt.Sprintf("%s:%s", prefix, primaryKey)
 }
 
 func GenPrimaryCachePrefix(instanceId string, tableName string) string {
 	return GormCachePrefix + ":" + instanceId + ":p:" + tableName
 }
 
-func GenSearchCacheKey(instanceId string, tableName string, sql string, vars ...interface{}) string {
+func GenSearchCacheKey(prefix string, sql string, vars ...interface{}) string {
 	buf := strings.Builder{}
 	buf.WriteString(sql)
 	for _, v := range vars {
@@ -38,7 +42,7 @@ func GenSearchCacheKey(instanceId string, tableName string, sql string, vars ...
 			buf.WriteString(fmt.Sprintf(":%v", v))
 		}
 	}
-	return fmt.Sprintf("%s:%s:s:%s:%s", GormCachePrefix, instanceId, tableName, buf.String())
+	return fmt.Sprintf("%s:%s", prefix, buf.String())
 }
 
 func GenSearchCachePrefix(instanceId string, tableName string) string {
